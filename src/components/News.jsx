@@ -3,35 +3,61 @@ import Weather from "./Weather";
 import Calender from "./Calender.jsx";
 import "./News.css";
 import userImg from "../assets/user.jpg";
-import techImg from "../assets/tech.jpg";
-import scienceImg from "../assets/science.jpg";
-import worldImg from "../assets/world.jpg";
-import healthImg from "../assets/health.jpg";
-import sportsImg from "../assets/sports.jpg";
-import nationImg from "../assets/nation.jpg";
-import noImg from "../assets/no-image.png";
+import noImg from "../assets/no-img.png";
+// import techImg from "../assets/tech.jpg";
+// import scienceImg from "../assets/science.jpg";
+// import worldImg from "../assets/world.jpg";
+// import healthImg from "../assets/health.jpg";
+// import sportsImg from "../assets/sports.jpg";
+// import nationImg from "../assets/nation.jpg";
+// import noImg from "../assets/no-image-png";
 
 import axios from "axios";
 
 import { useState, useEffect } from "react";
+
+const categories = [
+  "General",
+  "World",
+  "Business",
+  "Technology",
+  "Entertainment",
+  "Sports",
+  "Science",
+  "Health",
+  "Nation",
+];
+
 export const News = () => {
   const [headline, setHeadline] = useState(null);
   const [news, setNews] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("General");
 
   useEffect(() => {
     const fetchNews = async () => {
-      const apiKey = "a59fe809c163ee7d0f91b4fd7dc210d4";
-      const url =
-        "https://gnews.io/api/v4/top-headlines?category=technology&apikey=a59fe809c163ee7d0f91b4fd7dc210d4";
+      const apiKey = "a59fe809c163ee7d0f91b4fd7dc210d4"; //  api key
+      const url = `https://gnews.io/api/v4/top-headlines?category=${selectedCategory}&lang=en&apikey=${apiKey}`; //   api url
       const fetchData = axios.create;
-
       const response = await axios.get(url);
       const fetchedNews = response.data.articles;
+
+      fetchedNews.forEach((article) => {
+        if (!article.image) {
+          article.image = noImg;
+        }
+      });
+
       setHeadline(fetchedNews[0]);
       setNews(fetchedNews.slice(1, 7));
+      console.log(selectedCategory)
     };
     fetchNews();
-  }, []);
+  }, [selectedCategory,setSelectedCategory]);
+
+  const handleCategory = (e, category) => {
+    e.preventDefault();
+    setSelectedCategory(category);
+  };
 
   return (
     <div className="news">
@@ -41,7 +67,7 @@ export const News = () => {
           <form>
             <input type="text" placeholder="Search News..." />
             <button type="submit">
-              <i class="fa-solid fa-magnifying-glass"></i>
+              <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </form>
         </div>
@@ -55,33 +81,15 @@ export const News = () => {
           <nav className="categories">
             <h1 className="nav-heading">Categories</h1>
             <div className="nav-links">
-              <a href="" className="nav-link">
-                General
-              </a>
-              <a href="" className="nav-link">
-                World
-              </a>
-              <a href="" className="nav-link">
-                Business
-              </a>
-              <a href="" className="nav-link">
-                Technology
-              </a>
-              <a href="" className="nav-link">
-                Entertainment
-              </a>
-              <a href="" className="nav-link">
-                Sports
-              </a>
-              <a href="" className="nav-link">
-                Science
-              </a>
-              <a href="" className="nav-link">
-                Health
-              </a>
-              <a href="" className="nav-link">
-                Nation
-              </a>
+              
+              {categories.map((category) => {
+                return (
+                  <a href="" className="nav-link" key={category} onClick={(e) => handleCategory(e, category)}>
+                    {category}
+                  </a>
+                );
+              })}
+
               <a href="" className="nav-link">
                 Bookmarks <i className="fa-regular fa-bookmark"></i>
               </a>
@@ -91,7 +99,7 @@ export const News = () => {
         <div className="news-section">
           {headline && (
             <div className="headline">
-              <img src={headline.image} alt={headline.title} />
+              <img src={headline.image || noImg} alt={headline.title} />
               <h2 className="headline-title">
                 {headline.title}{" "}
                 <i className="fa-regular fa-bookmark bookmark"></i>
@@ -101,15 +109,13 @@ export const News = () => {
           <div className="news-grid">
             {news.map((article, index) => (
               <div key={index} className="news-grid-item">
-                <img src={article.image} alt={article.image} />
+                <img src={article.image || noImg} alt={article.image} />
                 <h3>
                   {article.title}
                   <i className="fa-regular fa-bookmark bookmark"></i>
                 </h3>
               </div>
             ))}
-
-
           </div>
         </div>
         <div className="my-blogs"></div>
