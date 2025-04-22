@@ -32,11 +32,18 @@ export const News = () => {
   const [headline, setHeadline] = useState(null);
   const [news, setNews] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("General");
+  const [searchInput,setSearchInput] = useState("");
+  const [searchQuery,setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchNews = async () => {
       const apiKey = "a59fe809c163ee7d0f91b4fd7dc210d4"; //  api key
-      const url = `https://gnews.io/api/v4/top-headlines?category=${selectedCategory}&lang=en&apikey=${apiKey}`; //   api url
+      let url = `https://gnews.io/api/v4/top-headlines?category=${selectedCategory}&lang=en&apikey=${apiKey}`; //   api url
+
+      if(searchQuery) {
+        url = `https://gnews.io/api/v4/search?q=${searchQuery}&lang=en&apikey=${apiKey}`; 
+      }
+
       const fetchData = axios.create;
       const response = await axios.get(url);
       const fetchedNews = response.data.articles;
@@ -49,23 +56,29 @@ export const News = () => {
 
       setHeadline(fetchedNews[0]);
       setNews(fetchedNews.slice(1, 7));
-      console.log(selectedCategory)
     };
-    fetchNews();
-  }, [selectedCategory,setSelectedCategory]);
 
+    fetchNews();
+  }, []);
+  
   const handleCategory = (e, category) => {
     e.preventDefault();
     setSelectedCategory(category);
   };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchQuery(searchInput);
+    setSearchInput("");
+  }
 
   return (
     <div className="news">
       <header className="news-header">
         <h1 className="logo">News And Blogs</h1>
         <div className="search-bar">
-          <form>
-            <input type="text" placeholder="Search News..." />
+          <form onSubmit={handleSearch}>
+            <input type="text" placeholder="Search News..." value={searchInput} onChange={(e) => setSearchInput(e.target.value)}/>
             <button type="submit">
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
@@ -80,11 +93,11 @@ export const News = () => {
           </div>
           <nav className="categories">
             <h1 className="nav-heading">Categories</h1>
+
             <div className="nav-links">
-              
               {categories.map((category) => {
                 return (
-                  <a href="" className="nav-link" key={category} onClick={(e) => handleCategory(e, category)}>
+                  <a href="#" className="nav-link" key={category} onClick={(e) => handleCategory(e, category)}>
                     {category}
                   </a>
                 );
