@@ -1,6 +1,7 @@
 import React from "react";
 import Weather from "./Weather";
 import Calender from "./Calender.jsx";
+import NewsModel from "./NewsModel.jsx";
 import "./News.css";
 import userImg from "../assets/user.jpg";
 import noImg from "../assets/no-img.png";
@@ -13,7 +14,6 @@ import noImg from "../assets/no-img.png";
 // import noImg from "../assets/no-image-png";
 
 import axios from "axios";
-
 import { useState, useEffect } from "react";
 
 const categories = [
@@ -34,6 +34,8 @@ export const News = () => {
   const [selectedCategory, setSelectedCategory] = useState("General");
   const [searchInput,setSearchInput] = useState("");
   const [searchQuery,setSearchQuery] = useState("");
+  const[showModel,setShowModel] = useState(false);
+  const [selectedArticle,setSelectedArticle] = useState(null);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -47,7 +49,7 @@ export const News = () => {
       const fetchData = axios.create;
       const response = await axios.get(url);
       const fetchedNews = response.data.articles;
-
+         
       fetchedNews.forEach((article) => {
         if (!article.image) {
           article.image = noImg;
@@ -59,7 +61,7 @@ export const News = () => {
     };
 
     fetchNews();
-  }, []);
+  }, [searchInput]);
   
   const handleCategory = (e, category) => {
     e.preventDefault();
@@ -71,7 +73,12 @@ export const News = () => {
     setSearchQuery(searchInput);
     setSearchInput("");
   }
-
+ 
+  const handleArticle = (article) => {
+    setSelectedArticle(article);
+    setShowModel(true)
+    console.log(article)
+  }
   return (
     <div className="news">
       <header className="news-header">
@@ -111,7 +118,7 @@ export const News = () => {
         </div>
         <div className="news-section">
           {headline && (
-            <div className="headline">
+            <div className="headline" onClick={() => handleArticle(headline)}>
               <img src={headline.image || noImg} alt={headline.title} />
               <h2 className="headline-title">
                 {headline.title}{" "}
@@ -121,7 +128,7 @@ export const News = () => {
           )}
           <div className="news-grid">
             {news.map((article, index) => (
-              <div key={index} className="news-grid-item">
+              <div key={index} className="news-grid-item" onClick={() => handleArticle(article)}>
                 <img src={article.image || noImg} alt={article.image} />
                 <h3>
                   {article.title}
@@ -131,7 +138,8 @@ export const News = () => {
             ))}
           </div>
         </div>
-        <div className="my-blogs"></div>
+        <NewsModel show ={showModel} article = {selectedArticle} onClose = {()=>setShowModel(false)}/>
+        <div className="my-blogs">Myblog</div>
         <div className="weather-calender">
           <Weather />
           <Calender />
