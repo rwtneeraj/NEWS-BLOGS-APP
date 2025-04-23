@@ -63,7 +63,7 @@ export const News = () => {
       setNews(fetchedNews.slice(1, 7));
 
       const savedBookmarks = JSON.parse(lovalStorage.getItem("bookmarks")) || [];
-      setBookmarks(savedBookmarks)
+      setBookmarks(savedBookmarks);
     };
 
     fetchNews();
