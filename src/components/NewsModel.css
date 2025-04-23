@@ -1,78 +1,48 @@
-.model-overlay{
-    position : fixed;
-    inset: 0;
-    background-color: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+
+.model-image {
+  width: 100%;
+  height: auto;
+  max-height: 50rem;
+  object-fit: cover;
+  opacity: 0.5;
+  border-radius: 1rem;
 }
 
-.model-content{
-    width: 90%;
-    max-width: 60rem;
-    height: auto;
-    max-height: 100%;
-    background-color: #111214;
-    padding: 4rem;
-    border-radius: 1rem;
-    box-shadow: 0 0 5rem 4rem rgba(0,0,0,0.5);
-    position: relative;
+.model-title {
+  font-family: "baves neue", sans-serif;
+  font-size: 2rem;
+  color: #fff;
+  letter-spacing: 0.1rem;
+  margin-top: 2rem;
 }
 
-.close-button{
-    position: absolute;
-    top : 1rem;
-    right: 2rem;
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-}
-
-.model-image{
-    width: 100%;
-    height: auto;
-    max-height: 50rem;
-    object-fit: cover;
-    opacity: 0.5;
-    border-radius: 1rem;
-}
-
-
-.model-title{
-    font-family: 'baves neue', sans-serif;
-    font-size: 2rem;
-    color: #fff;
-    letter-spacing: 0.1rem;
-    margin-top: 2rem;
-}
-
-.model-source, .model-date{
+.model-source,
+.model-date {
   font-family: "Comfortaa", sans-serif;
   font-size: 1.4rem;
   color: #bbb;
   margin-top: 1rem;
 }
 
-.model-content-text{
-    font-size : 1.6rem;
-    margin-top: 2rem;
-    line-height: 2.7rem;
-    color:#ddd;
+.model-content-text {
+  font-size: 1.6rem;
+  margin-top: 2rem;
+  line-height: 2.7rem;
+  color: #ddd;
 }
 
-.read-more-link{
-    width: 15rem;
-    display: inline-block;
-    background : linear-gradient(to right,#b88efc, #6877f4);
-    margin-top: 2rem;
-padding: 1rem 2rem;
-border-radius: 5rem;
-font-size: 1.6rem;
-text-align: center;
-text-transform: uppercase;
+.read-more-link {
+  width: 15rem;
+  display: inline-block;
+  background: linear-gradient(to right, #b88efc, #6877f4);
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  border-radius: 5rem;
+  font-size: 1.6rem;
+  text-align: center;
+  text-transform: uppercase;
 }
 
-.read-more-link:active{
-    transform: translateY(.1rem);
+.read-more-link:active {
+  transform: translateY(0.1rem);
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import demoImg from "../assets/demo.jpg";
 import "./NewsModel.css";
-
+import "./Model.css";
 const NewsModel = ({ show, article, onClose }) => {
   if (!show) {
     return null;
