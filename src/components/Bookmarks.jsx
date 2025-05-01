@@ -3,6 +3,7 @@ import "./Model.css";
 import "./Bookmarks.css";
 import demoImg from "../assets/demo.jpg";
 import noImg from "../assets/no-img.png";
+
 const Bookmarks = ({
   show,
   Bookmarks,
@@ -10,16 +11,22 @@ const Bookmarks = ({
   onSelectedArticle,
   deleteArticle,
 }) => {
+
   if (!show) {
+    console.log("this is not show")
     return null;
   }
   return (
+     
     <div className="model-overlay">
       <div className="model-content">
+    {console.log("hello bookmark",Bookmarks)}
+      
         <span className="close-button">
           <i className="fa-solid fa-xmark" onClick={onClose}></i>
         </span>
-        <h2 className="bookmarks-heading">{Bookmarks.title}</h2>
+
+        <h2 className="bookmarks-heading">{Bookmarks.title || ""}</h2>
         <div className="bookmarks list">
           {Bookmarks.map((article, index) => (
             <div

@@ -68,7 +68,7 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
       setNews(fetchedNews.slice(1, 7));
 
       const savedBookmarks =
-        JSON.parse(lovalStorage.getItem("bookmarks")) || [];
+        JSON.parse(localStorage.getItem("bookmarks")) || [];
       setBookmarks(savedBookmarks);
     };
 
@@ -102,6 +102,10 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
       return updateBookmark;
     });
   };
+
+  const handleBookmarkModel = () => {
+    setShowBookmarksModel(true);
+  }
 
   const handleBlog = (blog) => {
     setSelectedPost(blog);
@@ -155,11 +159,9 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
               })}
 
               <a
-                href={() => handleBookmark(article)}
+                href={handleBookmarkModel}
                 className="nav-link"
-                onClick={() => {
-                  handleBookmark(article);
-                }}
+                onClick={() => handleBookmarkModel(true)}
               >
                 Bookmarks <i className="fa-solid fa-bookmark"></i>
               </a>
@@ -214,11 +216,13 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
             ))}
           </div>
         </div>
+        
         <NewsModel
           show={showModel}
           article={selectedArticle}
           onClose={() => setShowModel(false)}
         />
+      
         <Bookmarks
           show={showBookmarksModel}
           bookmarks={bookmarks}
@@ -226,6 +230,7 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
           onSelectArticle={handleArticle}
           onDeleteBookmark={handleBookmark}
         />
+        
         <div className="my-blogs">
           <h1 className="my-blog-heading">My Blogs</h1>
           <div className="blog-posts">
