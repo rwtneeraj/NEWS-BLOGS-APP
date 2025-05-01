@@ -6,6 +6,9 @@ import Bookmarks from "./Bookmarks.jsx";
 import "./News.css";
 import userImg from "../assets/user.jpg";
 import noImg from "../assets/no-img.png";
+import blog1 from "../assets/blog1.jpg";
+import blog2 from "../assets/blog2.jpg";
+import blog3 from "../assets/blog3.jpg";
 // import techImg from "../assets/tech.jpg";
 // import scienceImg from "../assets/science.jpg";
 // import worldImg from "../assets/world.jpg";
@@ -29,7 +32,7 @@ const categories = [
   "Nation",
 ];
 
-export const News = () => {
+export const News = ({ onShowBlogs ,Blogs}) => {
   const [headline, setHeadline] = useState(null);
   const [news, setNews] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("General");
@@ -39,17 +42,18 @@ export const News = () => {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
   const [showBookmarksModel, setShowBookmarksModel] = useState(false);
+  // const [showBlogModel,setShowBlogModel] = useState(false);
+  
 
   useEffect(() => {
     const fetchNews = async () => {
       const apiKey = "a59fe809c163ee7d0f91b4fd7dc210d4"; //  api key
       let url = `https://gnews.io/api/v4/top-headlines?category=${selectedCategory}&lang=en&apikey=${apiKey}`; //   api url
-      
+
       if (searchQuery) {
         url = `https://gnews.io/api/v4/search?q=${searchQuery}&lang=en&apikey=${apiKey}`;
       }
 
-      const fetchData = axios.create;
       const response = await axios.get(url);
       const fetchedNews = response.data.articles;
 
@@ -62,7 +66,8 @@ export const News = () => {
       setHeadline(fetchedNews[0]);
       setNews(fetchedNews.slice(1, 7));
 
-      const savedBookmarks = JSON.parse(lovalStorage.getItem("bookmarks")) || [];
+      const savedBookmarks =
+        JSON.parse(lovalStorage.getItem("bookmarks")) || [];
       setBookmarks(savedBookmarks);
     };
 
@@ -92,7 +97,7 @@ export const News = () => {
       )
         ? prevBookmark.filter((bookmark) => bookmark.title !== article.title)
         : [...prevBookmark, article];
-        localStorage.setItem("bookmarks",JSON.stringify(updateBookmark));
+      localStorage.setItem("bookmarks", JSON.stringify(updateBookmark));
       return updateBookmark;
     });
   };
@@ -117,7 +122,7 @@ export const News = () => {
       </header>
       <div className="news-content">
         <div className="navbar">
-          <div className="user">
+          <div className="user" onClick={onShowBlogs}>
             <img src={userImg} alt="User Img" />
             <p>Mari's Blog</p>
           </div>
@@ -138,7 +143,13 @@ export const News = () => {
                 );
               })}
 
-              <a href={() => handleBookmark(article)} className="nav-link" onClick={() => {handleBookmark(article)}}>
+              <a
+                href={() => handleBookmark(article)}
+                className="nav-link"
+                onClick={() => {
+                  handleBookmark(article);
+                }}
+              >
                 Bookmarks <i className="fa-solid fa-bookmark"></i>
               </a>
             </div>
@@ -151,12 +162,13 @@ export const News = () => {
               <h2 className="headline-title">
                 {headline.title}{" "}
                 <i
-                  className={`${bookmarks.some(
-                    (bookmark) => bookmark.title === headline.title
-                  )
+                  className={`${
+                    bookmarks.some(
+                      (bookmark) => bookmark.title === headline.title
+                    )
                       ? "fa-solid"
                       : "fa-regular"
-                    } fa-bookmark bookmark`}
+                  } fa-bookmark bookmark`}
                   onClick={(e) =>
                     e.stopPropagation() || handleBookmark(headline)
                   }
@@ -175,12 +187,13 @@ export const News = () => {
                 <h3>
                   {article.title}
                   <i
-                    className={`${bookmarks.some(
-                      (bookmark) => bookmark.title === article.title
-                    )
+                    className={`${
+                      bookmarks.some(
+                        (bookmark) => bookmark.title === article.title
+                      )
                         ? "fa-solid"
                         : "fa-regular"
-                      } fa-bookmark bookmark`}
+                    } fa-bookmark bookmark`}
                     onClick={(e) =>
                       e.stopPropagation() || handleBookmark(article)
                     }
@@ -202,13 +215,41 @@ export const News = () => {
           onSelectArticle={handleArticle}
           onDeleteBookmark={handleBookmark}
         />
-        <div className="my-blogs">Myblog</div>
+        <div className="my-blogs">
+          <h1 className="my-blog-heading">My Blogs</h1>
+          <div className="blog-posts">
+            {
+              Blogs.map((blog) => {
+                return (
+                  <div className="blog-post">
+                  <img src={blog.image || noImg} alt={blog.title} />
+                  <h3>{blog.title}</h3>
+                  {/* <p>{blog.content}</p> */}
+                  <div className="post-buttons" >
+                    <button className="edit-button" >
+                      <i className="bx bxs-edit"></i>
+                    </button>
+                    <button className="delete-button">
+                      <i className="bx bxs-x-circle"></i>
+                    </button>
+                  </div>
+                </div>
+                )
+              })
+            }
+          </div>
+        </div>
         <div className="weather-calender">
           <Weather />
           <Calender />
         </div>
       </div>
-      <footer className="news-footer">Footer</footer>
+      <footer className="news-footer">
+        <p>
+          <span>News & Blogs App</span>
+        </p>
+        <p>&copy; All Right Reserved. By Code And Created</p>
+      </footer>
     </div>
   );
 };
