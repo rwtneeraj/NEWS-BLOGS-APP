@@ -3,6 +3,7 @@ import Weather from "./Weather";
 import Calender from "./Calender.jsx";
 import NewsModel from "./NewsModel.jsx";
 import Bookmarks from "./Bookmarks.jsx";
+import BlogsModel from "./BlogModel.jsx";
 import "./News.css";
 import userImg from "../assets/user.jpg";
 import noImg from "../assets/no-img.png";
@@ -32,7 +33,7 @@ const categories = [
   "Nation",
 ];
 
-export const News = ({ onShowBlogs ,Blogs}) => {
+export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
   const [headline, setHeadline] = useState(null);
   const [news, setNews] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("General");
@@ -42,8 +43,8 @@ export const News = ({ onShowBlogs ,Blogs}) => {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
   const [showBookmarksModel, setShowBookmarksModel] = useState(false);
-  // const [showBlogModel,setShowBlogModel] = useState(false);
-  
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [showBlogModel, setShowBlogModel] = useState(false);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -100,6 +101,16 @@ export const News = ({ onShowBlogs ,Blogs}) => {
       localStorage.setItem("bookmarks", JSON.stringify(updateBookmark));
       return updateBookmark;
     });
+  };
+
+  const handleBlog = (blog) => {
+    setSelectedPost(blog);
+    setShowBlogModel(true);
+  };
+
+  const closeBlogModel = () => {
+    setShowBlogModel(false);
+    setSelectedPost(null);
   };
 
   return (
@@ -218,26 +229,43 @@ export const News = ({ onShowBlogs ,Blogs}) => {
         <div className="my-blogs">
           <h1 className="my-blog-heading">My Blogs</h1>
           <div className="blog-posts">
-            {
-              Blogs.map((blog) => {
-                return (
-                  <div className="blog-post">
+            {Blogs.map((blog, index) => {
+              return (
+                <div
+                  key={index}
+                  className="blog-post"
+                  onClick={() => handleBlog(blog)}
+                >
                   <img src={blog.image || noImg} alt={blog.title} />
                   <h3>{blog.title}</h3>
-                  {/* <p>{blog.content}</p> */}
-                  <div className="post-buttons" >
-                    <button className="edit-button" >
+                  <div className="post-buttons">
+                    <button
+                      className="edit-button"
+                      onClick={() => onEditBlog(blog)}
+                    >
                       <i className="bx bxs-edit"></i>
                     </button>
-                    <button className="delete-button">
+                    <button
+                      className="delete-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDeleteBlog(blog);
+                      }}
+                    >
                       <i className="bx bxs-x-circle"></i>
                     </button>
                   </div>
                 </div>
-                )
-              })
-            }
+              );
+            })}
           </div>
+          {selectedPost && showBlogModel && (
+            <BlogsModel
+              show={showBlogModel}
+              blog={selectedPost}
+              onClose={closeBlogModel}
+            />
+          )}
         </div>
         <div className="weather-calender">
           <Weather />

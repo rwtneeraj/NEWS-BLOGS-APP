@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import userImg from "../assets/user.jpg";
 import noImg from "../assets/no-img.png";
 import "./Blogs.css";
 
-const Blogs = ({ onShowNews , onCreateBlog}) => {
+const Blogs = ({ onShowNews , onCreateBlog,editPost,isEditing}) => {
   const [showForm, setShowForm] = useState(false);
   const [image,setImage] = useState(null);
   const [title,setTitle] = useState("");
@@ -11,15 +11,24 @@ const Blogs = ({ onShowNews , onCreateBlog}) => {
   const [submitted,setSubmitted] = useState(false);
   const [titieValid,setTitleValid] = useState(true);
   const [contentValid,setContentValid] = useState(true);
-
+ 
+  useEffect(()=>{
+    if(isEditing && editPost) {
+      setImage(editPost.image);
+      setContent(editPost.content);
+      setTitle(editPost.title);
+      setShowForm(true);
+    } else {
+      setImage(null);
+      setContent("");
+      setTitle("");
+      setShowForm(false);
+    }
+  },[isEditing,editPost])
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     setTitleValid(true);
-    //  if(e.target.value <= 60){
-    //  }
-
-    //  setTitle("");
   }
 
   const handleContentChange = (e) => {
@@ -29,11 +38,20 @@ const Blogs = ({ onShowNews , onCreateBlog}) => {
 
   const handleImageChange = (e) => {
      if(e.target.files && e.target.files[0]){
+      const file = e.target.files[0];
+      const maxSize = 1 * 1024 * 1024;
+      
+      if(file.size > maxSize){
+        alert("File Size exceed 1 MB");
+        return
+      }
+
       const reader= new FileReader()
       reader.onload = () => {
         setImage(reader.result);
       }
-      reader.readAsDataURL(e.target.files[0])
+
+      reader.readAsDataURL(file)
      }
   }
 
@@ -47,7 +65,7 @@ const Blogs = ({ onShowNews , onCreateBlog}) => {
    }
 
    const newBlogs= {image:image || noImg,title,content};
-   onCreateBlog(newBlogs);
+   onCreateBlog(newBlogs,isEditing);
    setImage(null);
    setTitle("");
    setContent("");
@@ -71,7 +89,7 @@ const Blogs = ({ onShowNews , onCreateBlog}) => {
         }  
         {submitted && <p className="submission-message">Post Submitted...</p>}
           <div className={`blogs-right-form ${showForm ? "visible" : "hidden"}`}>
-            <h1>New Post</h1>
+            <h1>{isEditing ? "Edit Post" : "New Post"}</h1>
             <form action="" onSubmit={handleSubmit}>
               <div className="image-upload">
                 <label htmlFor="file-upload" className="file-upload">
@@ -96,7 +114,7 @@ const Blogs = ({ onShowNews , onCreateBlog}) => {
                 onChange={handleContentChange}
               ></textarea>
               <button type="submit" className="submit-btn">
-                Submit button
+                {isEditing ? "Update Post" : "Submit Post"}
               </button>
             </form>
           </div>
