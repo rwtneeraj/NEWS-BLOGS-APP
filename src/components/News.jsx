@@ -103,10 +103,6 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
     });
   };
 
-  const handleBookmarkModel = () => {
-    setShowBookmarksModel(true);
-  }
-
   const handleBlog = (blog) => {
     setSelectedPost(blog);
     setShowBlogModel(true);
@@ -159,9 +155,9 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
               })}
 
               <a
-                href={handleBookmarkModel}
+                href="#"
                 className="nav-link"
-                onClick={() => handleBookmarkModel(true)}
+                onClick={() => setShowBookmarksModel(true)}
               >
                 Bookmarks <i className="fa-solid fa-bookmark"></i>
               </a>
@@ -228,7 +224,7 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
           bookmarks={bookmarks}
           onClose={() => setShowBookmarksModel(false)}
           onSelectArticle={handleArticle}
-          onDeleteBookmark={handleBookmark}
+          deleteArticle={handleBookmark}
         />
         
         <div className="my-blogs">
@@ -241,7 +237,7 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
                   className="blog-post"
                   onClick={() => handleBlog(blog)}
                 >
-                  <img src={blog.image || noImg} alt={blog.title} />
+                  <img src={blog.image || noImg} alt={blog.title} className="blog-image" />
                   <h3>{blog.title}</h3>
                   <div className="post-buttons">
                     <button
@@ -281,7 +277,7 @@ export const News = ({ onShowBlogs, Blogs, onEditBlog, onDeleteBlog }) => {
         <p>
           <span>News & Blogs App</span>
         </p>
-        <p>&copy; All Right Reserved. By Code And Created</p>
+        <p>&copy; All Right Reserved.</p>
       </footer>
     </div>
   );

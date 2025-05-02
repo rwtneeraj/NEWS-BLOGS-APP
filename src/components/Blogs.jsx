@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import userImg from "../assets/user.jpg";
+import userImg from "../assets/blog-image.avif";
 import noImg from "../assets/no-img.png";
 import "./Blogs.css";
 
